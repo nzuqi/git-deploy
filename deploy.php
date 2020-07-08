@@ -1,37 +1,23 @@
 <?php
 /**
- * Simple PHP Git deploy script
+ * Git deploy script
  *
  * Automatically deploy the code using PHP and Git.
  *
  * @version 1.3.1
- * @link    https://github.com/markomarkovic/simple-php-git-deploy/
+ * @link    https://github.com/nzuqi/simple-php-git-deploy/
  */
 
 // =========================================[ Configuration start ]===
 
 /**
- * It's preferable to configure the script using `deploy-config.php` file.
- *
- * Rename `deploy-config.example.php` to `deploy-config.php` and edit the
- * configuration options there instead of here. That way, you won't have to edit
- * the configuration again if you download the new version of `deploy.php`.
- */
-if (file_exists(basename(__FILE__, '.php').'-config.php')) {
-	define('CONFIG_FILE', basename(__FILE__, '.php').'-config.php');
-	require_once CONFIG_FILE;
-} else {
-	define('CONFIG_FILE', __FILE__);
-}
-
-/**
  * Protect the script from unauthorized access by using a secret access token.
  * If it's not present in the access URL as a GET variable named `sat`
- * e.g. deploy.php?sat=Bett...s the script is not going to deploy.
+ * e.g. deploy.php?sat=SecretAccessToken the script is not going to deploy.
  *
  * @var string
  */
-if (!defined('SECRET_ACCESS_TOKEN')) define('SECRET_ACCESS_TOKEN', 'BetterChangeMeNowOrSufferTheConsequences');
+if (!defined('SECRET_ACCESS_TOKEN')) define('SECRET_ACCESS_TOKEN', 'SecretAccessToken');
 
 /**
  * The address of the remote Git repository that contains the code that's being
@@ -40,7 +26,7 @@ if (!defined('SECRET_ACCESS_TOKEN')) define('SECRET_ACCESS_TOKEN', 'BetterChange
  *
  * @var string
  */
-if (!defined('REMOTE_REPOSITORY')) define('REMOTE_REPOSITORY', 'https://github.com/markomarkovic/simple-php-git-deploy.git');
+if (!defined('REMOTE_REPOSITORY')) define('REMOTE_REPOSITORY', 'https://USERNAME:PASSWORD@github.com/username/repo-name.git');
 
 /**
  * The branch that's being deployed.
@@ -56,7 +42,7 @@ if (!defined('BRANCH')) define('BRANCH', 'master');
  *
  * @var string Full path including the trailing slash
  */
-if (!defined('TARGET_DIR')) define('TARGET_DIR', '/tmp/simple-php-git-deploy/');
+if (!defined('TARGET_DIR')) define('TARGET_DIR', '/');
 
 /**
  * Whether to delete the files that are not in the repository but are on the
@@ -81,6 +67,7 @@ if (!defined('DELETE_FILES')) define('DELETE_FILES', false);
  */
 if (!defined('EXCLUDE')) define('EXCLUDE', serialize(array(
 	'.git',
+	'.htaccess'
 )));
 
 /**
@@ -164,7 +151,7 @@ if (!defined('EMAIL_ON_ERROR')) define('EMAIL_ON_ERROR', false);
 // ===========================================[ Configuration end ]===
 
 // If there's authorization error, set the correct HTTP header.
-if (!isset($_GET['sat']) || $_GET['sat'] !== SECRET_ACCESS_TOKEN || SECRET_ACCESS_TOKEN === 'BetterChangeMeNowOrSufferTheConsequences') {
+if (!isset($_GET['sat']) || $_GET['sat'] !== SECRET_ACCESS_TOKEN || SECRET_ACCESS_TOKEN === 'SecretAccessToken') {
 	header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
 }
 ob_start();
@@ -174,13 +161,13 @@ ob_start();
 <head>
 	<meta charset="utf-8">
 	<meta name="robots" content="noindex">
-	<title>Simple PHP Git deploy script</title>
+	<title>Git deploy script</title>
 	<style>
-body { padding: 0 1em; background: #222; color: #fff; }
-h2, .error { color: #c33; }
-.prompt { color: #6be234; }
-.command { color: #729fcf; }
-.output { color: #999; }
+		body { padding: 0 1em; background: #222; color: #fff; }
+		h2, .error { color: #c33; }
+		.prompt { color: #6be234; }
+		.command { color: #729fcf; }
+		.output { color: #999; }
 	</style>
 </head>
 <body>
@@ -189,9 +176,9 @@ if (!isset($_GET['sat']) || $_GET['sat'] !== SECRET_ACCESS_TOKEN) {
 	header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
 	die('<h2>ACCESS DENIED!</h2>');
 }
-if (SECRET_ACCESS_TOKEN === 'BetterChangeMeNowOrSufferTheConsequences') {
+if (SECRET_ACCESS_TOKEN === 'SecretAccessToken') {
 	header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
-	die("<h2>You're suffering the consequences!<br>Change the SECRET_ACCESS_TOKEN from it's default value!</h2>");
+	die("<h2>Hey!<br>Change the SECRET_ACCESS_TOKEN from it's default value!</h2>");
 }
 ?>
 <pre>
