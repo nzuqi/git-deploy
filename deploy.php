@@ -4,8 +4,8 @@
  *
  * Automatically deploy the code using PHP and Git.
  *
- * @version 1.3.1
- * @link    https://github.com/nzuqi/simple-php-git-deploy/
+ * @version 1.0.1
+ * @link    https://github.com/nzuqi/git-deploy/
  */
 
 // =========================================[ Configuration start ]===
@@ -15,7 +15,7 @@
  * If it's not present in the access URL as a GET variable named `sat`
  * e.g. deploy.php?sat=SecretAccessToken the script is not going to deploy.
  *
- * @var string
+ * @var string 
  */
 if (!defined('SECRET_ACCESS_TOKEN')) define('SECRET_ACCESS_TOKEN', 'SecretAccessToken');
 
